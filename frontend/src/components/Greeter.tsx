@@ -7,45 +7,9 @@ import {
   useEffect,
   useState
 } from 'react';
-import styled from 'styled-components';
 import GreeterArtifact from '../artifacts/contracts/Greeter.sol/Greeter.json';
 import { Provider } from '../utils/provider';
 import { SectionDivider } from './SectionDivider';
-
-const StyledDeployContractButton = styled.button`
-  width: 180px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: blue;
-  cursor: pointer;
-  place-self: center;
-`;
-
-const StyledGreetingDiv = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 135px 2.7fr 1fr;
-  grid-gap: 10px;
-  place-self: center;
-  align-items: center;
-`;
-
-const StyledLabel = styled.label`
-  font-weight: bold;
-`;
-
-const StyledInput = styled.input`
-  padding: 0.4rem 0.6rem;
-  line-height: 2fr;
-`;
-
-const StyledButton = styled.button`
-  width: 150px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: blue;
-  cursor: pointer;
-`;
 
 export function Greeter(): ReactElement {
   const context = useWeb3React<Provider>();
@@ -162,19 +126,32 @@ export function Greeter(): ReactElement {
 
   return (
     <>
-      <StyledDeployContractButton
+      <button
         disabled={!active || greeterContract ? true : false}
         style={{
+          width: '180px',
+          height: '2rem',
+          borderRadius: '1rem',
+          placeSelf: 'center',
           cursor: !active || greeterContract ? 'not-allowed' : 'pointer',
           borderColor: !active || greeterContract ? 'unset' : 'blue'
         }}
         onClick={handleDeployContract}
       >
         Deploy Greeter Contract
-      </StyledDeployContractButton>
+      </button>
       <SectionDivider />
-      <StyledGreetingDiv>
-        <StyledLabel>Contract addr</StyledLabel>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateRows: '1fr 1fr 1fr',
+          gridTemplateColumns: '135px 2.7fr 1fr',
+          gridGap: '10px',
+          placeSelf: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <label className="font-bold">Contract addr</label>
         <div>
           {greeterContractAddr ? (
             greeterContractAddr
@@ -184,31 +161,40 @@ export function Greeter(): ReactElement {
         </div>
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
-        <StyledLabel>Current greeting</StyledLabel>
+        <label className="font-bold">Current greeting</label>
         <div>
           {greeting ? greeting : <em>{`<Contract not yet deployed>`}</em>}
         </div>
         {/* empty placeholder div below to provide empty first row, 3rd col div for a 2x3 grid */}
         <div></div>
-        <StyledLabel htmlFor="greetingInput">Set new greeting</StyledLabel>
-        <StyledInput
+        <label className="font-bold" htmlFor="greetingInput">
+          Set new greeting
+        </label>
+        <input
           id="greetingInput"
           type="text"
           placeholder={greeting ? '' : '<Contract not yet deployed>'}
           onChange={handleGreetingChange}
-          style={{ fontStyle: greeting ? 'normal' : 'italic' }}
-        ></StyledInput>
-        <StyledButton
+          style={{
+            fontStyle: greeting ? 'normal' : 'italic',
+            padding: '0.4rem 0.6rem',
+            lineHeight: '2fr'
+          }}
+        ></input>
+        <button
           disabled={!active || !greeterContract ? true : false}
           style={{
+            width: '150px',
+            height: '2rem',
+            borderRadius: '1rem',
             cursor: !active || !greeterContract ? 'not-allowed' : 'pointer',
             borderColor: !active || !greeterContract ? 'unset' : 'blue'
           }}
           onClick={handleGreetingSubmit}
         >
           Submit
-        </StyledButton>
-      </StyledGreetingDiv>
+        </button>
+      </div>
     </>
   );
 }

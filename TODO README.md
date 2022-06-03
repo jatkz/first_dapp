@@ -5,7 +5,7 @@ frontend
 cd frontend
 yarn start
 
-Tailwind integration
+Tailwind integration ??? tailwind-styled-components or just use normal classes
 
 Make people pay 💰to change the greeting. 😃 Change the Greeter.sol's setGreeting() function to be payable. Then write a withdraw() function in the contract and add withdraw functionality into the frontend Dapp. Ensure only the owner of the Greeter contract can withdraw money. Check out OpenZeppelin’s Ownable.sol contract for inspiration on how to do this.
 

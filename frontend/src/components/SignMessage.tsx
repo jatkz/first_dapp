@@ -1,16 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import { MouseEvent, ReactElement } from 'react';
-import styled from 'styled-components';
 import { Provider } from '../utils/provider';
-
-const StyledButton = styled.button`
-  width: 150px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: blue;
-  cursor: pointer;
-  place-self: center;
-`;
 
 export function SignMessage(): ReactElement {
   const context = useWeb3React<Provider>();
@@ -42,15 +32,19 @@ export function SignMessage(): ReactElement {
   }
 
   return (
-    <StyledButton
+    <button
       disabled={!active ? true : false}
       style={{
+        width: '150px',
+        height: '2rem',
+        borderRadius: '1rem',
+        placeSelf: 'center',
         cursor: !active ? 'not-allowed' : 'pointer',
         borderColor: !active ? 'unset' : 'blue'
       }}
       onClick={handleSignMessage}
     >
       Sign Message
-    </StyledButton>
+    </button>
   );
 }

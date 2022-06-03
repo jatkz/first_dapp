@@ -1,23 +1,9 @@
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import { ReactElement, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { Provider } from '../utils/provider';
 
 type CleanupFunction = (() => void) | undefined;
-
-const StyledWalletStatusDiv = styled.div`
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 0.6fr 0.1fr 0.6fr 1fr 0.1fr 0.6fr 0.5fr 0.1fr 1.1fr 0.4fr 0.1fr 1fr 0.9fr 0.1fr 0.7fr 0.1fr;
-  grid-gap: 10px;
-  place-self: center;
-  align-items: center;
-`;
-
-const StyledStatusIcon = styled.h1`
-  margin: 0px;
-`;
 
 function ChainId(): ReactElement {
   const { chainId } = useWeb3React<Provider>();
@@ -221,7 +207,7 @@ function NextNonce(): ReactElement {
     getNextNonce(library, account);
 
     // create a named next nonce handler function to fetch the next nonce each block.
-    // in the cleanup function use the fucntion name to remove the listener
+    // in the cleanup function use the function name to remove the listener
     const getNextNonceHandler = (): void => {
       getNextNonce(library, account);
     };
@@ -231,6 +217,7 @@ function NextNonce(): ReactElement {
     // cleanup function
     return (): void => {
       stale = true;
+      library.removeListener('block', getNextNonceHandler);
       setNextNonce(undefined);
     };
   }, [account, library, chainId]); // ensures refresh if referential identity of library doesn't change across chainIds
@@ -252,19 +239,29 @@ function StatusIcon(): ReactElement {
   const { active, error } = useWeb3React<Provider>();
 
   return (
-    <StyledStatusIcon>{active ? '🟢' : error ? '🔴' : '🟠'}</StyledStatusIcon>
+    <h1 style={{ margin: '0px' }}>{active ? '🟢' : error ? '🔴' : '🟠'}</h1>
   );
 }
 
 export function WalletStatus(): ReactElement {
   return (
-    <StyledWalletStatusDiv>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateRows: '1fr',
+        gridTemplateColumns:
+          '0.6fr 0.1fr 0.6fr 1fr 0.1fr 0.6fr 0.5fr 0.1fr 1.1fr 0.4fr 0.1fr 1fr 0.9fr 0.1fr 0.7fr 0.1fr',
+        gridGap: '10px',
+        placeSelf: 'center',
+        alignItems: 'center'
+      }}
+    >
       <ChainId />
       <BlockNumber />
       <Account />
       <Balance />
       <NextNonce />
       <StatusIcon />
-    </StyledWalletStatusDiv>
+    </div>
   );
 }

@@ -5,7 +5,6 @@ import {
   UserRejectedRequestError
 } from '@web3-react/injected-connector';
 import { MouseEvent, ReactElement, useState } from 'react';
-import styled from 'styled-components';
 import { injected } from '../utils/connectors';
 import { useEagerConnect, useInactiveListener } from '../utils/hooks';
 import { Provider } from '../utils/provider';
@@ -36,31 +35,6 @@ function getErrorMessage(error: Error): string {
   return errorMessage;
 }
 
-const StyledActivateDeactivateDiv = styled.div`
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 10px;
-  place-self: center;
-  align-items: center;
-`;
-
-const StyledActivateButton = styled.button`
-  width: 150px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: green;
-  cursor: pointer;
-`;
-
-const StyledDeactivateButton = styled.button`
-  width: 150px;
-  height: 2rem;
-  border-radius: 1rem;
-  border-color: red;
-  cursor: pointer;
-`;
-
 function Activate(): ReactElement {
   const context = useWeb3React<Provider>();
   const { activate, active } = context;
@@ -88,16 +62,17 @@ function Activate(): ReactElement {
   useInactiveListener(!eagerConnectionSuccessful);
 
   return (
-    <StyledActivateButton
+    <button
       disabled={active}
+      className="items-center px-2.5 py-1.5 border-2 border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200"
       style={{
         cursor: active ? 'not-allowed' : 'pointer',
-        borderColor: activating ? 'orange' : active ? 'unset' : 'green'
+        borderColor: activating ? 'orange' : active ? 'green' : 'white'
       }}
       onClick={handleActivate}
     >
       Connect
-    </StyledActivateButton>
+    </button>
   );
 }
 
@@ -112,16 +87,17 @@ function Deactivate(): ReactElement {
   }
 
   return (
-    <StyledDeactivateButton
+    <button
       disabled={!active}
+      className="items-center px-2.5 py-1.5 border-2 border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200"
       style={{
         cursor: active ? 'pointer' : 'not-allowed',
-        borderColor: active ? 'red' : 'unset'
+        borderColor: !active ? 'red' : 'white'
       }}
       onClick={handleDeactivate}
     >
       Disconnect
-    </StyledDeactivateButton>
+    </button>
   );
 }
 
@@ -134,9 +110,18 @@ export function ActivateDeactivate(): ReactElement {
   }
 
   return (
-    <StyledActivateDeactivateDiv>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateRows: '1fr',
+        gridTemplateColumns: '1fr 1fr',
+        gridGap: '10px',
+        placeSelf: 'center',
+        alignItems: 'center'
+      }}
+    >
       <Activate />
       <Deactivate />
-    </StyledActivateDeactivateDiv>
+    </div>
   );
 }
