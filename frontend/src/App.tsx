@@ -15,6 +15,7 @@ export function App(): ReactElement {
       <SignMessage />
       <SectionDivider />
       <Greeter />
+      <SectionDivider />
     </div>
   );
 }

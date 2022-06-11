@@ -4,4 +4,4 @@ coverage*
 gasReporterOutput.json
 node_modules
 typechain
-
+*.sol

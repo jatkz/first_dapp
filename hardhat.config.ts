@@ -12,7 +12,7 @@ import './tasks/deploy';
 dotenv.config();
 
 const config: HardhatUserConfig = {
-  solidity: '0.8.4',
+  solidity: '0.8.0',
   paths: {
     artifacts: './frontend/src/artifacts'
   },
