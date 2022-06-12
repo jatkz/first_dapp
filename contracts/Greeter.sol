@@ -29,7 +29,7 @@ contract Greeter is Ownable {
 
     function withdraw(uint amount) public onlyOwner {
         uint sendAmount;
-        if (amount <= address(this).balance) {
+        if (amount >= address(this).balance) {
             sendAmount = address(this).balance;
         } else {
             sendAmount = amount;
