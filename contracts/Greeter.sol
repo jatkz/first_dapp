@@ -36,8 +36,4 @@ contract Greeter is Ownable {
         }
         payable(msg.sender).transfer(sendAmount);
     }
-
-    function getBalance() public onlyOwner view returns (uint) {
-        return address(this).balance;
-    }
 }

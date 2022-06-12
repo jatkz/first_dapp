@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { Contract, ethers, Signer } from 'ethers';
+import { Contract, ethers, providers, Signer } from 'ethers';
 import {
   ChangeEvent,
   MouseEvent,
@@ -73,7 +73,9 @@ export function Greeter(): ReactElement {
     }
   }
   async function getBalance(greeterContract: Contract) {
-    const newBalance = await greeterContract.getBalance();
+    const newBalance = await greeterContract.provider
+      .getBalance(greeterContract.address)
+      .then((d) => d.toString());
     if (newBalance !== greetingBalance) {
       setGreetingBalance(ethers.utils.formatEther(newBalance));
     }
