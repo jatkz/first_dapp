@@ -93,9 +93,7 @@ describe('Greeter', function (): void {
       withdrawReciept.effectiveGasPrice
     );
 
-    const balance = await waffle.provider
-      .getBalance(greeter.address)
-      .then((d) => d.toNumber());
+    await waffle.provider.getBalance(greeter.address).then((d) => d.toNumber());
 
     const endBal = await owner.getBalance();
     const balanceDelta = startBal.sub(endBal);
@@ -127,9 +125,7 @@ describe('Greeter', function (): void {
       withdrawReciept.effectiveGasPrice
     );
 
-    const balance = await waffle.provider
-      .getBalance(greeter.address)
-      .then((d) => d.toNumber());
+    await waffle.provider.getBalance(greeter.address).then((d) => d.toNumber());
 
     const endBal = await owner.getBalance();
     const balanceDelta = startBal.sub(endBal);
@@ -140,14 +136,14 @@ describe('Greeter', function (): void {
   });
 
   it('should reject non owner from withdrawing balance ', async function (): Promise<void> {
-    const [owner, addr1] = await ethers.getSigners();
+    const [, addr1] = await ethers.getSigners();
 
     const setGreetingTx = await greeter.setGreeting('Hola, mundo!', {
       value: 1000
     });
 
     // wait until the transaction is mined
-    const receipt = await setGreetingTx.wait();
+    await setGreetingTx.wait();
 
     const withdrawTx = await greeter.connect(addr1).withdraw(1000);
     await expect(withdrawTx.wait()).to.be.reverted;

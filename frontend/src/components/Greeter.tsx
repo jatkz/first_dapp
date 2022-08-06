@@ -29,7 +29,11 @@ interface ContractAddressStore {
 
 export function Greeter(): ReactElement {
   const context = useWeb3React<Provider>();
-  const { library, active, account } = context;
+  const { library, active, account, chainId } = context;
+
+  // mainnet 1
+  // rinkeby 4
+  // hardhat local 31337
 
   const [signer, setSigner] = useState<Signer>();
   const [greeterContract, setGreeterContract] = useState<Contract>();
@@ -56,6 +60,9 @@ export function Greeter(): ReactElement {
         addresses: contractStore.addresses,
         current: addr
       });
+    },
+    clearStore: () => {
+      setContractStore(defaultContractAddrArray);
     }
   };
 
@@ -82,6 +89,10 @@ export function Greeter(): ReactElement {
     return newBalance;
   }
 
+  function isContractNotSelected() {
+    return contractStore.current == defaultContractAddrArray.current;
+  }
+
   // library change setting the signer
   useEffect((): void => {
     if (!library) {
@@ -93,6 +104,7 @@ export function Greeter(): ReactElement {
 
   // greeter contract is the top most data, thus changing it updates everything else
   useEffect((): void => {
+    if (isContractNotSelected()) return;
     if (!greeterContract) {
       if (contractStore?.current && signer) {
         const _greeterContract = new ethers.Contract(
@@ -104,10 +116,16 @@ export function Greeter(): ReactElement {
       }
       return;
     }
-
-    getGreeting(greeterContract);
-    getBalance(greeterContract);
-    ContractStoreUtils.setCurrent(greeterContract.address);
+    try {
+      getGreeting(greeterContract);
+      getBalance(greeterContract);
+      ContractStoreUtils.setCurrent(greeterContract.address);
+    } catch (err) {
+      window.alert(
+        'Retrieving Greeting data failed. Deleting stale local storage data.'
+      );
+      ContractStoreUtils.clearStore();
+    }
 
     async function getOwner(ownable: Contract): Promise<void> {
       const _owner = await ownable.owner();
@@ -122,7 +140,7 @@ export function Greeter(): ReactElement {
 
   // if the selected address changes update the greeter contract
   useEffect((): void => {
-    if (!greeterContract) return;
+    if (!greeterContract || isContractNotSelected()) return;
     const _contract = greeterContract.attach(contractStore.current);
     setGreeterContract(_contract);
   }, [contractStore?.current]);
